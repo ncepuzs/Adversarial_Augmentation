@@ -56,11 +56,6 @@ parser.add_argument('--shadow', type=str, default='ResNet')
 parser.add_argument('--loss_mode', type=str, default='MSE')
 
 
-
-
-
-
-
 def train(classifier, inversion, log_interval, device, data_loader, optimizer, epoch, penalty, norm_l, path_out, classifier_sub, lambda_adv, adv_param, logger, k_top, train_or_not, loss_mode):
     classifier.eval()
     classifier_sub.eval()

@@ -150,75 +150,75 @@ class LRmodule(nn.Module):
         outdata = self.fc(outdata)
         return torch.sigmoid(outdata)
 
-# ResNet18 defined
-class ResBlock(nn.Module):
-    def __init__(self, inchannel, outchannel, stride=1):
-        super(ResBlock, self).__init__()
-        self.left = nn.Sequential(
-            nn.Conv2d(inchannel, outchannel, kernel_size=3, stride=stride, padding=1, bias=False),
-            nn.BatchNorm2d(outchannel),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(outchannel, outchannel, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(outchannel)
-        )
-        self.shortcut = nn.Sequential()
-        if stride != 1 or inchannel != outchannel:
-            self.shortcut = nn.Sequential(
-                nn.Conv2d(inchannel, outchannel, kernel_size=1, stride=stride, bias=False),
-                nn.BatchNorm2d(outchannel)
-            )
+# # ResNet18 defined
+# class ResBlock(nn.Module):
+#     def __init__(self, inchannel, outchannel, stride=1):
+#         super(ResBlock, self).__init__()
+#         self.left = nn.Sequential(
+#             nn.Conv2d(inchannel, outchannel, kernel_size=3, stride=stride, padding=1, bias=False),
+#             nn.BatchNorm2d(outchannel),
+#             nn.ReLU(inplace=True),
+#             nn.Conv2d(outchannel, outchannel, kernel_size=3, stride=1, padding=1, bias=False),
+#             nn.BatchNorm2d(outchannel)
+#         )
+#         self.shortcut = nn.Sequential()
+#         if stride != 1 or inchannel != outchannel:
+#             self.shortcut = nn.Sequential(
+#                 nn.Conv2d(inchannel, outchannel, kernel_size=1, stride=stride, bias=False),
+#                 nn.BatchNorm2d(outchannel)
+#             )
             
-    def forward(self, x):
-        out = self.left(x)
-        out = out + self.shortcut(x)
-        out = F.relu(out)
+#     def forward(self, x):
+#         out = self.left(x)
+#         out = out + self.shortcut(x)
+#         out = F.relu(out)
         
-        return out
+#         return out
 
-class FaceResNet(nn.Module):
-    def __init__(self, ResBlock, num_classes=10):
-        super(FaceResNet, self).__init__()
-        self.inchannel = 64
-        self.conv1 = nn.Sequential(
-            nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False),
-            nn.BatchNorm2d(64),
-            nn.ReLU()
-        )
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        self.layer1 = self.make_layer(ResBlock, 64, 2, stride=1)
-        self.layer2 = self.make_layer(ResBlock, 128, 2, stride=2)
-        self.layer3 = self.make_layer(ResBlock, 256, 2, stride=2)        
-        self.layer4 = self.make_layer(ResBlock, 512, 2, stride=2)  
-        self.avgpool = nn.AdaptiveAvgPool2d((1, 1))      
-        self.fc = nn.Linear(512, num_classes)
-    def make_layer(self, block, channels, num_blocks, stride):
-        strides = [stride] + [1] * (num_blocks - 1)
-        layers = []
-        for stride in strides:
-            layers.append(block(self.inchannel, channels, stride))
-            self.inchannel = channels
-        # print(*layers)
-        return nn.Sequential(*layers)
-    def forward(self, x, release=False, celoss=False):
-        x = x.view(-1, 1, 64, 64)
-        # if input size : 224x224
-        out = self.conv1(x) # output size: 112x112
-        out = self.maxpool(out) # output size: 56x56
-        out = self.layer1(out) # output size: 56x56
-        out = self.layer2(out) # output size: 28x28
-        out = self.layer3(out) # output size: 14x14
-        out = self.layer4(out) # output size: 7x7
-        out = self.avgpool(out) # output size: 1x1
-        out = out.view(out.size(0), -1)
-        out = self.fc(out) # output size: 1x1
+# class FaceResNet(nn.Module):
+#     def __init__(self, ResBlock, num_classes=10):
+#         super(FaceResNet, self).__init__()
+#         self.inchannel = 64
+#         self.conv1 = nn.Sequential(
+#             nn.Conv2d(1, 64, kernel_size=7, stride=2, padding=3, bias=False),
+#             nn.BatchNorm2d(64),
+#             nn.ReLU()
+#         )
+#         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+#         self.layer1 = self.make_layer(ResBlock, 64, 2, stride=1)
+#         self.layer2 = self.make_layer(ResBlock, 128, 2, stride=2)
+#         self.layer3 = self.make_layer(ResBlock, 256, 2, stride=2)        
+#         self.layer4 = self.make_layer(ResBlock, 512, 2, stride=2)  
+#         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))      
+#         self.fc = nn.Linear(512, num_classes)
+#     def make_layer(self, block, channels, num_blocks, stride):
+#         strides = [stride] + [1] * (num_blocks - 1)
+#         layers = []
+#         for stride in strides:
+#             layers.append(block(self.inchannel, channels, stride))
+#             self.inchannel = channels
+#         # print(*layers)
+#         return nn.Sequential(*layers)
+#     def forward(self, x, release=False, celoss=False):
+#         x = x.view(-1, 1, 64, 64)
+#         # if input size : 224x224
+#         out = self.conv1(x) # output size: 112x112
+#         out = self.maxpool(out) # output size: 56x56
+#         out = self.layer1(out) # output size: 56x56
+#         out = self.layer2(out) # output size: 28x28
+#         out = self.layer3(out) # output size: 14x14
+#         out = self.layer4(out) # output size: 7x7
+#         out = self.avgpool(out) # output size: 1x1
+#         out = out.view(out.size(0), -1)
+#         out = self.fc(out) # output size: 1x1
 
-        if celoss:
-            return out
-        else:
-            if release:
-                return F.softmax(out, dim=1)
-            else:
-                return F.log_softmax(out, dim=1)
+#         if celoss:
+#             return out
+#         else:
+#             if release:
+#                 return F.softmax(out, dim=1)
+#             else:
+#                 return F.log_softmax(out, dim=1)
 
 
 

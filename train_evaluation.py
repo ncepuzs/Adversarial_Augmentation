@@ -164,8 +164,6 @@ def main():
                 'best_cl_acc': best_cl_acc,
             }
             torch.save(state, args.path_out + 'classifier100_' + str(predefined_accuracy) + '_16.pth')
-            # if best_cl_acc > predefined_accuracy:
-            #     break
             
             early_stop_label = 0
         else:

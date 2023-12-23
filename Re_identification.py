@@ -257,17 +257,6 @@ def main():
                 # save_imgs(out, num_in_row=32, row_num=32, path_out=args.path_out)
                 plot = False
 
-                # truth = data[0:512]
-                # inverse = reconstruction_target[0:512]
-                # out = torch.cat((inverse, truth))
-                # for i in range(16):
-                #     out[i * 64:i * 64 + 32] = inverse[i * 32:i * 32 + 32]
-                #     out[i * 64 + 32:i * 64 + 64] = truth[i * 32:i * 32 + 32]
-                # # vutils.save_image(out, args.path_out + 'recon.png', nrow=32, normalize=False)
-                # vutils.save_image(out, args.path_out + 'recon_norm_on_substitute_classifier.png', nrow=32, normalize=True)
-                # save_imgs(out, num_in_row=32, row_num=32, path_out=args.path_out)
-                plot = False
-
     loss =  loss_recon / len(test_loader.dataset) /(64*64)
     print("-------------------------------------------------------------")
     print("The reconstruction loss is :{}".format(loss))
@@ -340,7 +329,6 @@ def main():
                 
 
 def save_imgs(tensor_vector, num_in_row, row_num, path_out):
-    # print(tensor_vector.shape)
     for row_i in range(1, row_num + 1):
         start_i = (row_i-1) * num_in_row
         end_i = row_i * num_in_row

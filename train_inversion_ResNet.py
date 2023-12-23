@@ -363,38 +363,5 @@ def main():
                     logger.info('\nThe best test inversion model on {} epoch: Average MSE loss: {:.6f}\n'.format(epoch, best_recon_loss))
                     break
 
-    # else:
-    #     conv_out = LayerActivations(classifier.module.encoder, args.inter_n * 4 - 1)
-    #     inversion = nn.DataParallel(Inversion_partial(nz=args.nz, truncation=args.truncation, c=args.c, tc_num=args.inter_n)).to(device)
-    #     optimizer = optim.Adam(inversion.parameters(), lr=args.lr, betas=(0.5, 0.999), amsgrad=True)
-
-    #     # Train inversion model using partial structure
-    #     best_recon_loss = 999
-    #     early_stop_label = 0
-    #     for epoch in range(1, args.epochs + 1):
-    #         train_partial(classifier, conv_out, inversion, args.log_interval, device, train_loader, optimizer, epoch, logger)
-    #         recon_loss = test_partial(classifier, conv_out, inversion, device, test_loader, epoch, 'test1', logger, args.path_out)
-
-    #         if recon_loss < best_recon_loss:
-    #             best_recon_loss = recon_loss
-    #             state = {
-    #                 'epoch': epoch,
-    #                 'model': inversion.state_dict(),
-    #                 'optimizer': optimizer.state_dict(),
-    #                 'best_recon_loss': best_recon_loss
-    #             }
-    #             torch.save(state, args.path_out + 'inversion.pth')
-    #             shutil.copyfile(args.path_out + 'recon_round.png', args.path_out + 'best.png')
-
-    #             early_stop_label = 0
-    #         else:
-    #             early_stop_label += 1
-    #             if early_stop_label == args.early_stop:
-    #                 conv_out.remove()
-    #                 break
-
-
-    
-
 if __name__ == '__main__':
     main()

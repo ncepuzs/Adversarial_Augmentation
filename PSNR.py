@@ -25,4 +25,3 @@ os.system("python Re_identification.py --norm '2' --penalty 'yes' \
     --path_out Inversion_Models/PSNR/CNN/our/ReId/ --path_Inv Inversion_Models/PSNR/CNN/our/ \
     --nz 100 --adv_param '(300,0.1)' --lambda_pen 0.005")
 
-# os.system("python output.py --path_out output/PSNR/")

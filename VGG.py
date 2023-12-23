@@ -25,9 +25,9 @@ model_urls = {
 }
 
 '''
-VGG 默认input 大小为224*224 （imagenet大小）
-此时Facescrub的大小为64*64, 修改classifier层即可
-或者也可以加一个averagepool层
+VGG input : 224*224 （imagenet）
+Facescrub size: 64*64, modify classifier layer
+or adding an averagepool layer
 self.avgpool = nn.AdaptiveAvgPool2d(7)
 '''
 class VGG(nn.Module):
